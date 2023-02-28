@@ -1,7 +1,5 @@
 #!/bin/bash
 
-LED blue
-
 # Verbinde den Shark Jack mit dem Router
 /sbin/ifconfig eth0 up
 /sbin/dhclient eth0
